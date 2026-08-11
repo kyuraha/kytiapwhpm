@@ -371,101 +371,146 @@ export function WimHof() {
   const [rounds, setRounds] = useState(0)
 
   const orbRef = useRef(null)
-  const phaseRef = useRef('inhale')
+  const breathStartRef = useRef(0)
+  const breathIndexRef = useRef(0)
+  const holdStartRef = useRef(0)
+  const recoveryStartRef = useRef(0)
+  const recoveryStageRef = useRef('inhale')
+  const recoveryDoneRef = useRef(false)
 
   useEffect(() => {
     if (phase !== 'breathing') return
     const tempo = TEMPOS.find((t) => t.id === tempoId) ?? TEMPOS[1]
-    let raf
-    let phaseStart = performance.now()
+    const inMs = tempo.in * 1000
+    const outMs = tempo.out * 1000
+    const breathMs = inMs + outMs
 
-    const update = (now) => {
-      const elapsed = now - phaseStart
-      const duration = (phaseRef.current === 'inhale' ? tempo.in : tempo.out) * 1000
-      const t = Math.min(1, elapsed / duration)
+    let raf
+
+    const applyScale = () => {
+      if (!orbRef.current) return
+      const elapsed = Date.now() - breathStartRef.current
+      const pos = ((elapsed % breathMs) + breathMs) % breathMs
+      const inhaling = pos < inMs
+      const t = inhaling ? pos / inMs : (pos - inMs) / outMs
       const eased = easeInOut(t)
-      const scale =
-        phaseRef.current === 'inhale' ? 0.55 + 0.55 * eased : 1.1 - 0.55 * eased
-      if (orbRef.current) {
-        orbRef.current.style.transform = `scale(${scale.toFixed(4)})`
-      }
-      if (elapsed >= duration) {
-        phaseStart = now
-        if (phaseRef.current === 'inhale') {
-          phaseRef.current = 'exhale'
-        } else {
-          phaseRef.current = 'inhale'
-          setBreathIndex((i) => i + 1)
-        }
-      }
-      raf = requestAnimationFrame(update)
+      const scale = inhaling ? 0.55 + 0.55 * eased : 1.1 - 0.55 * eased
+      orbRef.current.style.transform = `scale(${scale.toFixed(4)})`
     }
 
-    raf = requestAnimationFrame(update)
+    const loop = () => {
+      applyScale()
+      raf = requestAnimationFrame(loop)
+    }
+
+    raf = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(raf)
   }, [phase, tempoId])
 
   useEffect(() => {
-    if (phase === 'breathing' && breathIndex >= breathCount) {
-      playGoHold()
-      setPhase('holding')
-      setHoldElapsed(0)
+    if (phase !== 'breathing') return
+    const tempo = TEMPOS.find((t) => t.id === tempoId) ?? TEMPOS[1]
+    const breathMs = (tempo.in + tempo.out) * 1000
+
+    const check = () => {
+      const elapsed = Date.now() - breathStartRef.current
+      const done = Math.floor(elapsed / breathMs)
+      if (done >= breathCount) {
+        playGoHold()
+        breathIndexRef.current = breathCount
+        setBreathIndex(breathCount)
+        holdStartRef.current = Date.now()
+        setHoldElapsed(0)
+        setPhase('holding')
+      } else if (done !== breathIndexRef.current) {
+        breathIndexRef.current = done
+        setBreathIndex(done)
+      }
     }
-  }, [phase, breathIndex, breathCount])
+
+    check()
+    const id = setInterval(check, 250)
+    return () => clearInterval(id)
+  }, [phase, tempoId, breathCount])
 
   useEffect(() => {
-    if (phase === 'holding') {
-      const id = setInterval(() => setHoldElapsed((t) => t + 1), 1000)
-      return () => clearInterval(id)
+    if (phase !== 'holding') return
+    const update = () => {
+      setHoldElapsed(Math.max(0, Math.floor((Date.now() - holdStartRef.current) / 1000)))
     }
+    update()
+    const id = setInterval(update, 250)
+    return () => clearInterval(id)
   }, [phase])
 
   useEffect(() => {
     if (phase !== 'recovery') return
-    if (recoveryStage === 'inhale') {
-      const id = setTimeout(() => {
-        playCountdownStart()
-        setRecoveryStage('hold')
-      }, RECOVERY_INHALE_MS)
-      return () => clearTimeout(id)
-    }
-    const id = setInterval(() => setRecoveryRemaining((r) => Math.max(0, r - 1)), 1000)
-    return () => clearInterval(id)
-  }, [phase, recoveryStage])
+    recoveryDoneRef.current = false
+    const IN_MS = RECOVERY_INHALE_MS
+    const TOTAL_MS = IN_MS + RECOVERY_SECONDS * 1000
 
-  useEffect(() => {
-    if (phase === 'recovery' && recoveryStage === 'hold' && recoveryRemaining === 0) {
-      playRoundComplete()
-      setRounds((r) => r + 1)
-      setBreathIndex(0)
-      setRecoveryStage('inhale')
-      setRecoveryRemaining(RECOVERY_SECONDS)
-      setPhase('breathing')
+    const tick = () => {
+      const elapsed = Date.now() - recoveryStartRef.current
+      if (elapsed < IN_MS) {
+        if (recoveryStageRef.current !== 'inhale') {
+          recoveryStageRef.current = 'inhale'
+          setRecoveryStage('inhale')
+        }
+        return
+      }
+      if (recoveryStageRef.current !== 'hold') {
+        recoveryStageRef.current = 'hold'
+        setRecoveryStage('hold')
+        playCountdownStart()
+      }
+      const remaining = Math.max(0, Math.ceil((TOTAL_MS - elapsed) / 1000))
+      setRecoveryRemaining(remaining)
+      if (remaining === 0 && !recoveryDoneRef.current) {
+        recoveryDoneRef.current = true
+        playRoundComplete()
+        breathIndexRef.current = 0
+        setBreathIndex(0)
+        recoveryStageRef.current = 'inhale'
+        setRecoveryStage('inhale')
+        setRecoveryRemaining(RECOVERY_SECONDS)
+        setRounds((r) => r + 1)
+        breathStartRef.current = Date.now()
+        setPhase('breathing')
+      }
     }
-  }, [phase, recoveryStage, recoveryRemaining])
+
+    tick()
+    const id = setInterval(tick, 250)
+    return () => clearInterval(id)
+  }, [phase])
 
   const start = () => {
     initAudio()
-    phaseRef.current = 'inhale'
     setRounds(0)
+    breathIndexRef.current = 0
     setBreathIndex(0)
+    breathStartRef.current = Date.now()
     setHoldElapsed(0)
+    recoveryStageRef.current = 'inhale'
     setRecoveryStage('inhale')
     setRecoveryRemaining(RECOVERY_SECONDS)
     setPhase('breathing')
   }
 
   const stop = () => {
-    phaseRef.current = 'inhale'
     setPhase('idle')
+    breathIndexRef.current = 0
     setBreathIndex(0)
     setHoldElapsed(0)
+    recoveryStageRef.current = 'inhale'
     setRecoveryStage('inhale')
     setRecoveryRemaining(RECOVERY_SECONDS)
   }
 
   const onHoldDone = () => {
     playInhalePrompt()
+    recoveryStartRef.current = Date.now()
+    recoveryStageRef.current = 'inhale'
     setRecoveryStage('inhale')
     setRecoveryRemaining(RECOVERY_SECONDS)
     setPhase('recovery')

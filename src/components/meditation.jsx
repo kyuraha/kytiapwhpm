@@ -272,16 +272,26 @@ export function Meditation() {
   }
 
   useEffect(() => {
-    if (status === 'running') {
-      const id = setInterval(() => {
-        const r = Math.max(0, Math.round((endRef.current - Date.now()) / 1000))
-        setRemaining(r)
-        if (r <= 0) {
-          setStatus('finished')
-          playRoundComplete()
-        }
-      }, 250)
-      return () => clearInterval(id)
+    if (status !== 'running') return
+
+    const tick = () => {
+      const r = Math.max(0, Math.round((endRef.current - Date.now()) / 1000))
+      setRemaining(r)
+      if (r <= 0) {
+        setStatus('finished')
+        playRoundComplete()
+      }
+    }
+
+    const id = setInterval(tick, 250)
+    const onVisibility = () => {
+      if (!document.hidden) tick()
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+
+    return () => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', onVisibility)
     }
   }, [status])
 
