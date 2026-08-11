@@ -8,6 +8,7 @@
 
   --animate-breathe: breathe 9s ease-in-out infinite;
   --animate-pulse-soft: pulse-soft 3.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-recover-inhale: recover-inhale 2s ease-out forwards;
 
   @keyframes breathe {
     0%,
@@ -30,6 +31,15 @@
     100% {
       transform: scale(1.7);
       opacity: 0;
+    }
+  }
+
+  @keyframes recover-inhale {
+    from {
+      transform: scale(0.45);
+    }
+    to {
+      transform: scale(1.15);
     }
   }
 }

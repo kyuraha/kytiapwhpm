@@ -5,6 +5,7 @@ import { Button } from '#components/ui/button'
 import { Card, CardContent } from '#components/ui/card'
 import { ProgressRing } from '#components/progress-ring'
 import { cn } from '#lib/utils'
+import { initAudio, playRoundComplete } from '#lib/sounds'
 
 const PRESETS = [5, 10, 15, 20, 30]
 const DEFAULT_MINUTES = 10
@@ -14,36 +15,6 @@ function formatTime(totalSeconds) {
   const m = Math.floor(totalSeconds / 60)
   const s = totalSeconds % 60
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-}
-
-function playChime() {
-  try {
-    const Ctx = window.AudioContext || window.webkitAudioContext
-    const ctx = new Ctx()
-    const now = ctx.currentTime
-
-    const nodes = [523.25, 659.25, 783.99]
-    nodes.forEach((freq, i) => {
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      osc.type = 'sine'
-      osc.frequency.value = freq
-      gain.gain.setValueAtTime(0, now + i * 0.35)
-      gain.gain.linearRampToValueAtTime(0.12, now + i * 0.35 + 0.02)
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.35 + 2)
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      osc.start(now + i * 0.35)
-      osc.stop(now + i * 0.35 + 2.2)
-    })
-
-    const finish = setTimeout(() => ctx.close(), 4500)
-    ctx.onstatechange = () => {
-      if (ctx.state === 'closed') clearTimeout(finish)
-    }
-  } catch {
-    // biarkan hening jika audio tidak tersedia
-  }
 }
 
 function Stepper({ label, value, onInc, onDec, decDisabled = false, incDisabled = false }) {
@@ -307,7 +278,7 @@ export function Meditation() {
         setRemaining(r)
         if (r <= 0) {
           setStatus('finished')
-          playChime()
+          playRoundComplete()
         }
       }, 250)
       return () => clearInterval(id)
@@ -315,6 +286,7 @@ export function Meditation() {
   }, [status])
 
   const start = () => {
+    initAudio()
     setRemaining(totalSeconds)
     setTotal(totalSeconds)
     endRef.current = Date.now() + totalSeconds * 1000
@@ -322,6 +294,7 @@ export function Meditation() {
   }
 
   const resume = () => {
+    initAudio()
     endRef.current = Date.now() + remaining * 1000
     setStatus('running')
   }
