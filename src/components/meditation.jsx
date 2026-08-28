@@ -60,16 +60,18 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
 
   return (
     <Card className="border-emerald-400/15 bg-gradient-to-b from-emerald-400/[0.07] to-transparent shadow-2xl shadow-black/40">
-      <CardContent className="flex flex-col gap-7 p-5 sm:p-6">
-        <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/20">
-            <Flower2 className="size-5 text-emerald-950" />
+      <CardContent className="flex flex-col gap-4 p-4 sm:gap-5 sm:p-5">
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/20">
+              <Flower2 className="size-5 text-emerald-950" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold tracking-tight text-foreground">Ruang Hening</div>
+              <div className="text-xs leading-snug text-muted-foreground">
+                Hadir sepenuhnya — beberapa menit cukup untuk menjernihkan pikiran.
+              </div>
+            </div>
           </div>
-          <div>
-            <div className="text-sm font-semibold text-foreground">Sesi Meditasi</div>
-            <div className="text-xs text-muted-foreground">Pilih durasi, lalu mulai.</div>
-          </div>
-        </div>
 
         <div className="grid grid-cols-2 gap-3">
           <Stepper
@@ -90,8 +92,8 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
         </div>
 
         <div>
-          <div className="mb-2.5 text-xs font-medium tracking-widest text-muted-foreground uppercase">
-            Durasi cepat
+          <div className="mb-2 text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
+            Pilihan cepat
           </div>
           <div className="flex flex-wrap gap-2">
             {PRESETS.map((m) => (
@@ -115,11 +117,15 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
           </div>
         </div>
 
-        <div className="rounded-xl border border-emerald-400/15 bg-[#0b1020]/60 px-4 py-4 text-center">
-          <div className="font-mono text-4xl font-semibold tracking-tight tabular-nums text-emerald-100">
+        <div className="relative overflow-hidden rounded-xl border border-emerald-400/15 bg-[#0b1020]/60 px-4 py-4 text-center">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-emerald-400/[0.06] to-transparent" />
+          <div className="relative font-mono text-4xl font-semibold tracking-tight tabular-nums text-emerald-100">
             {formatTime(totalSeconds)}
           </div>
-          <div className="mt-1 text-xs text-muted-foreground">total durasi</div>
+          <div className="relative mt-1 text-xs tracking-wide text-muted-foreground">durasi sesi</div>
+          <p className="relative mx-auto mt-2 max-w-[28ch] text-[11px] leading-relaxed text-muted-foreground/70">
+            Tidak perlu lama untuk bermakna. Konsistensi lebih penting dari durasi.
+          </p>
         </div>
 
         <Button
@@ -137,20 +143,20 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
 
 function RunningView({ status, remaining, progress, onPause, onResume, onStop }) {
   return (
-    <div className="relative flex min-h-[460px] flex-col items-center justify-center gap-12 overflow-hidden rounded-2xl border border-emerald-400/15 bg-gradient-to-b from-emerald-400/[0.06] to-transparent px-4 py-10 sm:min-h-[500px]">
+    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-emerald-400/15 bg-gradient-to-b from-emerald-400/[0.06] to-transparent px-4 py-6 sm:gap-8 sm:py-8">
       <ZenAmbience />
 
       <div className="relative flex items-center justify-center">
         <ProgressRing
           id="med-ring"
           progress={progress}
-          size={286}
-          stroke={12}
+          size={240}
+          stroke={11}
           startColor="#34d399"
           endColor="#14b8a6"
         >
           <div className="text-center">
-            <div className="font-mono text-5xl font-semibold tracking-tight tabular-nums text-emerald-50">
+            <div className="font-mono text-4xl font-semibold tracking-tight tabular-nums text-emerald-50 sm:text-5xl">
               {formatTime(remaining)}
             </div>
             <div className="mt-1 text-[11px] font-medium tracking-widest text-emerald-300/60 uppercase">
@@ -196,7 +202,7 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
 
 function FinishedView({ minutes, onAgain }) {
   return (
-    <div className="relative flex min-h-[460px] flex-col items-center justify-center gap-10 overflow-hidden rounded-2xl border border-emerald-400/15 bg-gradient-to-b from-emerald-400/[0.06] to-transparent px-4 py-10 text-center sm:min-h-[500px]">
+    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-emerald-400/15 bg-gradient-to-b from-emerald-400/[0.06] to-transparent px-4 py-6 text-center sm:gap-8 sm:py-8">
       <ZenAmbience />
 
       <div className="relative">

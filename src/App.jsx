@@ -45,7 +45,7 @@ const MODES = [
 
 function ModeSwitch({ value, onChange }) {
   return (
-    <div className="grid w-full grid-cols-2 gap-1.5 rounded-2xl border border-white/[0.06] bg-white/[0.04] p-1.5 backdrop-blur">
+    <div className="grid w-full shrink-0 grid-cols-2 gap-1.5 rounded-2xl border border-white/[0.06] bg-white/[0.04] p-1.5 backdrop-blur">
       {MODES.map(({ id, label, Icon, activeClassName }) => {
         const active = value === id
         return (
@@ -55,7 +55,7 @@ function ModeSwitch({ value, onChange }) {
             aria-pressed={active}
             onClick={() => onChange(id)}
             className={cn(
-              'inline-flex h-11 items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all',
+              'inline-flex h-10 items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all sm:h-11',
               active
                 ? activeClassName
                 : 'text-muted-foreground hover:bg-white/[0.05] hover:text-foreground',
@@ -75,7 +75,7 @@ function App() {
   const [tab, setTab] = useState('wimhof')
 
   return (
-    <div className="dark relative isolate min-h-dvh w-full overflow-x-hidden">
+    <div className="dark relative isolate flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-[#0b1020]">
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-[#0b1020]" />
         <div className="absolute -top-48 right-0 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-indigo-500/[0.14] blur-[140px]" />
@@ -83,11 +83,11 @@ function App() {
         <div className="absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-emerald-400/[0.07] blur-[120px]" />
       </div>
 
-      <header className="sticky top-0 z-20 border-b border-white/[0.06] bg-[#0b1020]/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 w-full max-w-2xl items-center justify-between px-4">
+      <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center border-b border-white/[0.06] bg-[#0b1020]/80 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-2xl items-center justify-between px-4">
           <div className="flex items-center gap-3">
             <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500 shadow-lg shadow-cyan-500/20">
-              <Wind className="size-4.5 text-white" />
+              <Wind className="size-[18px] text-white" />
             </div>
             <div>
               <div className="text-sm leading-tight font-semibold tracking-tight">
@@ -110,22 +110,22 @@ function App() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-2xl px-4 pb-16">
-        <section className="pt-10 pb-7 text-center sm:pt-14 sm:pb-9">
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Latihan Pernapasan</h1>
-          <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-            Dua latihan terfokus: pernapasan Wim Hof untuk membangkitkan energi, dan meditasi
-            untuk menenangkan pikiran.
+      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col overflow-hidden px-4 pt-2 pb-3 min-h-0">
+        <section className="shrink-0 pt-2 pb-2.5 text-center sm:pt-3 sm:pb-3">
+          <h1 className="text-[22px] font-bold tracking-tight sm:text-2xl">Latihan Pernapasan Terpandu</h1>
+          <p className="mx-auto mt-1 max-w-[42ch] text-xs leading-relaxed text-muted-foreground sm:text-[13px]">
+            Satu tarikan bisa mengubah keadaan. Pilih Wim Hof untuk mengisi energi, atau meditasi
+            untuk menjernihkan pikiran.
           </p>
         </section>
 
         <ModeSwitch value={tab} onChange={setTab} />
 
-        <div className="mt-7">
-          <div className={cn(tab !== 'wimhof' && 'hidden')}>
+        <div className="mt-2 flex flex-1 flex-col justify-center overflow-hidden min-h-0 sm:mt-3">
+          <div className={cn('flex flex-col justify-center overflow-hidden', tab !== 'wimhof' && 'hidden')}>
             <WimHof />
           </div>
-          <div className={cn(tab !== 'meditasi' && 'hidden')}>
+          <div className={cn('flex flex-col justify-center overflow-hidden', tab !== 'meditasi' && 'hidden')}>
             <Meditation />
           </div>
         </div>
