@@ -10,6 +10,7 @@ import {
   playGoHold,
   playInhalePrompt,
   playCountdownStart,
+  playExhale,
   playRoundComplete,
 } from '#lib/sounds'
 
@@ -18,6 +19,7 @@ const BREATH_MIN = 10
 const BREATH_MAX = 100
 const RECOVERY_SECONDS = 20
 const RECOVERY_INHALE_MS = 2000
+const RECOVERY_EXHALE_MS = 7000
 
 const TEMPOS = [
   { id: 'cepat', label: 'Cepat', in: 1.2, out: 1.2 },
@@ -41,7 +43,7 @@ function FlowSteps({ count }) {
   const steps = [
     { title: 'Napas Awal', desc: `${count}× napas dalam berirama` },
     { title: 'Tahan Napas', desc: 'Tahan hingga batas nyaman' },
-    { title: 'Tarik & Tahan', desc: `Tarik penuh, tahan ${RECOVERY_SECONDS} dtk` },
+    { title: 'Tarik & Tahan', desc: `Tarik penuh, tahan ${RECOVERY_SECONDS} dtk + buang` },
   ]
 
   return (
@@ -283,7 +285,7 @@ function RecoveryStage({ stage, remaining, rounds }) {
       <div className="relative flex flex-col items-center gap-5">
         <div className="relative flex size-56 items-center justify-center sm:size-60">
           <div
-            key={rounds}
+            key={`inhale-${rounds}`}
             className="absolute size-48 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 shadow-[0_0_60px_14px_rgba(56,189,248,0.35)] animate-recover-inhale sm:size-52"
           />
           <div className="relative flex flex-col items-center gap-1 text-slate-950">
@@ -294,6 +296,27 @@ function RecoveryStage({ stage, remaining, rounds }) {
         </div>
         <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground sm:text-sm">
           Isi paru-paru sepenuhnya, rasakan dada mengembang perlahan.
+        </p>
+      </div>
+    )
+  }
+
+  if (stage === 'exhale') {
+    return (
+      <div className="relative flex flex-col items-center gap-5">
+        <div className="relative flex size-56 items-center justify-center sm:size-60">
+          <div
+            key={`exhale-${rounds}`}
+            className="absolute size-52 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 shadow-[0_0_60px_14px_rgba(56,189,248,0.35)] animate-recover-exhale sm:size-52"
+          />
+          <div className="relative flex flex-col items-center gap-1 text-slate-950">
+            <Wind className="size-8 sm:size-9 opacity-80" />
+            <div className="text-lg font-bold tracking-tight sm:text-xl">Buang Napas</div>
+            <div className="text-[10px] font-medium tracking-widest opacity-70 uppercase">perlahan & rileks</div>
+          </div>
+        </div>
+        <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground sm:text-sm">
+          Hembuskan perlahan lewat mulut. Biarkan bahu turun sebelum putaran berikutnya.
         </p>
       </div>
     )
@@ -468,7 +491,9 @@ export function WimHof() {
     if (phase !== 'recovery') return
     recoveryDoneRef.current = false
     const IN_MS = RECOVERY_INHALE_MS
-    const TOTAL_MS = IN_MS + RECOVERY_SECONDS * 1000
+    const HOLD_MS = RECOVERY_SECONDS * 1000
+    const EXHALE_MS = RECOVERY_EXHALE_MS
+    const TOTAL_MS = IN_MS + HOLD_MS + EXHALE_MS
 
     const tick = () => {
       const elapsed = Date.now() - recoveryStartRef.current
@@ -479,14 +504,25 @@ export function WimHof() {
         }
         return
       }
-      if (recoveryStageRef.current !== 'hold') {
-        recoveryStageRef.current = 'hold'
-        setRecoveryStage('hold')
-        playCountdownStart()
+      if (elapsed < IN_MS + HOLD_MS) {
+        if (recoveryStageRef.current !== 'hold') {
+          recoveryStageRef.current = 'hold'
+          setRecoveryStage('hold')
+          playCountdownStart()
+        }
+        const remaining = Math.max(0, Math.ceil((IN_MS + HOLD_MS - elapsed) / 1000))
+        setRecoveryRemaining(remaining)
+        return
       }
-      const remaining = Math.max(0, Math.ceil((TOTAL_MS - elapsed) / 1000))
-      setRecoveryRemaining(remaining)
-      if (remaining === 0 && !recoveryDoneRef.current) {
+      if (elapsed < TOTAL_MS) {
+        if (recoveryStageRef.current !== 'exhale') {
+          recoveryStageRef.current = 'exhale'
+          setRecoveryStage('exhale')
+          playExhale()
+        }
+        return
+      }
+      if (!recoveryDoneRef.current) {
         recoveryDoneRef.current = true
         playRoundComplete()
         breathIndexRef.current = 0

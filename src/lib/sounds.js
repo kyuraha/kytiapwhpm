@@ -49,6 +49,12 @@ export function playCountdownStart() {
   tone({ freq: 783.99, delay: 0, duration: 0.3, volume: 0.12 })
 }
 
+export function playExhale() {
+  tone({ freq: 783.99, delay: 0, duration: 0.35, volume: 0.12 })
+  tone({ freq: 659.25, delay: 0.18, duration: 0.4, volume: 0.11 })
+  tone({ freq: 523.25, delay: 0.38, duration: 0.55, volume: 0.1 })
+}
+
 export function playRoundComplete() {
   const notes = [523.25, 659.25, 783.99]
   notes.forEach((freq, i) => {
