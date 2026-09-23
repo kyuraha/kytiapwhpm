@@ -50,7 +50,7 @@ function FlowSteps({ count }) {
     <div>
       <div className="mb-2 flex items-baseline justify-between">
         <div className="text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
-          Alur satu putaran
+          一周天 · Alur Satu Putaran
         </div>
         <div className="hidden text-[11px] text-muted-foreground/60 sm:block">Mengalir otomatis</div>
       </div>
@@ -61,7 +61,7 @@ function FlowSteps({ count }) {
         {steps.map((step, i) => (
           <div key={step.title} className="flex flex-1 items-center gap-1 sm:gap-2">
             <div className="flex flex-1 flex-col items-center gap-1.5 rounded-xl border border-white/[0.06] bg-white/[0.03] px-1.5 py-2.5 text-center sm:flex-row sm:items-start sm:gap-3 sm:p-3 sm:text-left">
-              <div className="flex size-5 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-[10px] font-bold text-cyan-300 sm:size-6 sm:text-[11px]">
+              <div className="flex size-5 shrink-0 items-center justify-center rounded-full bg-gold-400/10 text-[10px] font-bold text-gold-300 sm:size-6 sm:text-[11px]">
                 {i + 1}
               </div>
               <div className="min-w-0">
@@ -100,14 +100,14 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
   }
 
   return (
-    <Card className="border-white/[0.06] bg-gradient-to-b from-white/[0.05] to-transparent shadow-2xl shadow-black/40">
+    <Card className="border-gold-300/10 bg-gradient-to-b from-gold-300/[0.05] to-transparent shadow-2xl shadow-black/40">
       <CardContent className="flex flex-col gap-5 p-4 sm:gap-6 sm:p-5">
         <FlowSteps count={breathCount} />
 
         <div className="flex flex-col divide-y divide-white/[0.06] overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.03]">
           <div className="flex flex-col gap-3 p-3.5 sm:flex-row sm:items-center sm:justify-between sm:p-4">
             <div className="flex gap-2.5">
-              <div className="hidden size-8 items-center justify-center rounded-lg bg-cyan-400/10 text-cyan-300 sm:flex">
+              <div className="hidden size-8 items-center justify-center rounded-full bg-gold-400/10 text-gold-300 sm:flex">
                 <Wind className="size-4" />
               </div>
               <div>
@@ -117,7 +117,7 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
                 </div>
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-1 self-start rounded-xl border border-white/10 bg-[#0b1020] p-1 sm:self-auto">
+            <div className="flex shrink-0 items-center gap-1 self-start rounded-xl border border-gold-300/15 bg-ink-900 p-1 sm:self-auto">
               <StepperBtn label="kurangi" onClick={() => adjust(-5)} disabled={breathCount <= BREATH_MIN} />
               <div className="w-12 text-center font-mono text-lg font-semibold tabular-nums text-foreground">
                 {breathCount}
@@ -127,7 +127,7 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
           </div>
           <div className="flex flex-col gap-3 p-3.5 sm:flex-row sm:items-center sm:justify-between sm:p-4">
             <div className="flex gap-2.5">
-              <div className="hidden size-8 items-center justify-center rounded-lg bg-sky-400/10 text-sky-300 sm:flex">
+              <div className="hidden size-8 items-center justify-center rounded-full bg-jade-400/10 text-jade-400 sm:flex">
                 <Timer className="size-4" />
               </div>
               <div>
@@ -137,7 +137,7 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
                 </div>
               </div>
             </div>
-            <div className="flex shrink-0 gap-1 self-start rounded-full border border-white/10 bg-[#0b1020] p-1 sm:self-auto">
+            <div className="flex shrink-0 gap-1 self-start rounded-full border border-gold-300/15 bg-ink-900 p-1 sm:self-auto">
               {TEMPOS.map((t) => (
                 <button
                   key={t.id}
@@ -146,7 +146,7 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
                   className={cn(
                     'h-8 rounded-full px-3.5 text-sm font-medium transition-colors',
                     tempoId === t.id
-                      ? 'bg-white text-[#0b1020] shadow'
+                      ? 'bg-gold-200 text-[#241a08] shadow'
                       : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
@@ -160,7 +160,7 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
         <div className="flex flex-col items-center gap-3">
           <Button
             size="lg"
-            className="h-12 w-full rounded-xl bg-gradient-to-b from-cyan-400 to-sky-500 text-slate-950 shadow-lg shadow-cyan-500/25 hover:from-cyan-300 hover:to-sky-400 sm:w-72"
+            className="h-12 w-full rounded-xl bg-gradient-to-b from-gold-200 to-gold-400 text-[#241a08] shadow-lg shadow-gold-500/25 hover:from-gold-200 hover:to-gold-300 sm:w-72"
             onClick={onStart}
           >
             <Play className="size-4" />
@@ -189,15 +189,15 @@ function PhaseTrack({ phase }) {
             <div
               className={cn(
                 'h-1 w-full rounded-full transition-colors',
-                state === 'done' && 'bg-white/30',
-                state === 'active' && 'bg-gradient-to-r from-cyan-400 to-sky-400',
+                state === 'done' && 'bg-gold-300/40',
+                state === 'active' && 'bg-gradient-to-r from-gold-300 to-gold-500',
                 state === 'idle' && 'bg-white/10',
               )}
             />
             <span
               className={cn(
                 'text-[10px] tracking-wider uppercase',
-                state === 'active' ? 'font-medium text-cyan-300' : 'text-muted-foreground/70',
+                state === 'active' ? 'font-medium text-gold-300' : 'text-muted-foreground/70',
               )}
             >
               {label}
@@ -213,23 +213,23 @@ function BreathingStage({ count, current, orbRef }) {
   return (
     <div className="relative flex flex-col items-center gap-5">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="size-56 rounded-full border border-cyan-400/15 animate-pulse-soft sm:size-60" />
+        <div className="size-56 rounded-full border border-gold-300/15 animate-pulse-soft sm:size-60" />
       </div>
       <ProgressRing
         id="wim-breathe"
         progress={current / count}
         size={240}
         stroke={11}
-        startColor="#22d3ee"
-        endColor="#6366f1"
+        startColor="#e3c384"
+        endColor="#b98a3e"
       >
         <div className="relative flex size-[190px] items-center justify-center sm:size-[210px]">
           <div
             ref={orbRef}
-            className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 to-sky-500 opacity-95 shadow-[0_0_60px_14px_rgba(34,211,238,0.35)] will-change-transform"
+            className="absolute inset-0 rounded-full bg-gradient-to-br from-gold-200 to-gold-500 opacity-95 shadow-[0_0_60px_14px_rgba(212,169,92,0.35)] will-change-transform"
             style={{ transform: 'scale(0.55)' }}
           />
-          <div className="relative text-center text-slate-950">
+          <div className="relative text-center text-[#241a08]">
             <div className="font-mono text-5xl font-semibold tracking-tight tabular-nums sm:text-6xl">
               {Math.min(current + 1, count)}
             </div>
@@ -249,17 +249,17 @@ function BreathingStage({ count, current, orbRef }) {
 function HoldingStage({ elapsed, onHoldDone }) {
   return (
     <div className="relative flex flex-col items-center gap-5">
-      <div className="relative flex size-48 items-center justify-center rounded-full border border-amber-400/25 bg-amber-400/[0.05] sm:size-52">
-        <div className="absolute -inset-5 rounded-full border border-amber-400/10 animate-breathe sm:-inset-6" />
+      <div className="relative flex size-48 items-center justify-center rounded-full border border-gold-400/25 bg-gold-400/[0.05] sm:size-52">
+        <div className="absolute -inset-5 rounded-full border border-gold-400/10 animate-breathe sm:-inset-6" />
         <div
-          className="absolute -inset-8 rounded-full border border-amber-400/[0.06] animate-breathe sm:-inset-12"
+          className="absolute -inset-8 rounded-full border border-gold-400/[0.06] animate-breathe sm:-inset-12"
           style={{ animationDelay: '-4.5s' }}
         />
         <div className="relative text-center">
           <div className="font-mono text-5xl font-semibold tracking-tight tabular-nums text-foreground sm:text-6xl">
             {formatTime(elapsed)}
           </div>
-          <div className="mt-1 text-[11px] font-medium tracking-widest text-amber-300/70 uppercase">
+          <div className="mt-1 text-[11px] font-medium tracking-widest text-gold-300/70 uppercase">
             tahan napas
           </div>
         </div>
@@ -269,7 +269,7 @@ function HoldingStage({ elapsed, onHoldDone }) {
       </p>
       <Button
         size="lg"
-        className="h-11 w-full min-w-0 rounded-xl bg-gradient-to-b from-amber-400 to-orange-500 text-sm font-semibold text-slate-950 shadow-lg shadow-amber-500/25 hover:from-amber-300 hover:to-orange-400 sm:h-12 sm:w-64"
+        className="h-11 w-full min-w-0 rounded-xl bg-gradient-to-b from-gold-300 to-gold-500 text-sm font-semibold text-[#241a08] shadow-lg shadow-gold-500/25 hover:from-gold-200 hover:to-gold-400 sm:h-12 sm:w-64"
         onClick={onHoldDone}
       >
         <Wind className="size-4" />
@@ -286,9 +286,9 @@ function RecoveryStage({ stage, remaining, rounds }) {
         <div className="relative flex size-56 items-center justify-center sm:size-60">
           <div
             key={`inhale-${rounds}`}
-            className="absolute size-48 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 shadow-[0_0_60px_14px_rgba(56,189,248,0.35)] animate-recover-inhale sm:size-52"
+            className="absolute size-48 rounded-full bg-gradient-to-br from-jade-300 to-jade-600 shadow-[0_0_60px_14px_rgba(132,201,164,0.35)] animate-recover-inhale sm:size-52"
           />
-          <div className="relative flex flex-col items-center gap-1 text-slate-950">
+          <div className="relative flex flex-col items-center gap-1 text-[#0f231a]">
             <Wind className="size-8 sm:size-9" />
             <div className="text-lg font-bold tracking-tight sm:text-xl">Tarik Napas Penuh</div>
             <div className="text-[10px] font-medium tracking-widest opacity-70 uppercase">satu tarikan dalam</div>
@@ -307,9 +307,9 @@ function RecoveryStage({ stage, remaining, rounds }) {
         <div className="relative flex size-56 items-center justify-center sm:size-60">
           <div
             key={`exhale-${rounds}`}
-            className="absolute size-52 rounded-full bg-gradient-to-br from-sky-400 to-blue-500 shadow-[0_0_60px_14px_rgba(56,189,248,0.35)] animate-recover-exhale sm:size-52"
+            className="absolute size-52 rounded-full bg-gradient-to-br from-jade-300 to-jade-600 shadow-[0_0_60px_14px_rgba(132,201,164,0.35)] animate-recover-exhale sm:size-52"
           />
-          <div className="relative flex flex-col items-center gap-1 text-slate-950">
+          <div className="relative flex flex-col items-center gap-1 text-[#0f231a]">
             <Wind className="size-8 sm:size-9 opacity-80" />
             <div className="text-lg font-bold tracking-tight sm:text-xl">Buang Napas</div>
             <div className="text-[10px] font-medium tracking-widest opacity-70 uppercase">perlahan & rileks</div>
@@ -329,11 +329,11 @@ function RecoveryStage({ stage, remaining, rounds }) {
         progress={remaining / RECOVERY_SECONDS}
         size={240}
         stroke={11}
-        startColor="#38bdf8"
-        endColor="#818cf8"
+        startColor="#a8dcc0"
+        endColor="#478a68"
       >
-        <div className="flex size-52 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-blue-600 animate-breathe sm:size-56">
-          <div className="text-center text-slate-950">
+        <div className="flex size-52 items-center justify-center rounded-full bg-gradient-to-br from-jade-400 to-jade-600 animate-breathe sm:size-56">
+          <div className="text-center text-[#0f231a]">
             <div className="font-mono text-5xl font-semibold tracking-tight tabular-nums sm:text-6xl">
               {remaining}
             </div>
@@ -365,21 +365,26 @@ function SessionConsole({
   return (
     <div className="flex flex-col gap-4 sm:gap-5">
       <div className="flex items-center justify-center">
-        <div className="flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.04] px-3.5 py-1 text-xs font-medium text-muted-foreground sm:px-4 sm:py-1.5">
-          <span className="size-1.5 animate-pulse rounded-full bg-cyan-400" />
-          Putaran {rounds + 1} · {phase === 'breathing' ? 'Bernapas' : phase === 'holding' ? 'Menahan' : 'Pemulihan'}
+        <div className="flex items-center gap-2 rounded-full border border-gold-300/15 bg-white/[0.04] px-3.5 py-1 text-xs font-medium text-muted-foreground sm:px-4 sm:py-1.5">
+          <span className="size-1.5 animate-pulse rounded-full bg-gold-400" />
+          第 {rounds + 1} 周天 · {phase === 'breathing' ? 'Bernapas' : phase === 'holding' ? 'Menahan' : 'Pemulihan'}
         </div>
       </div>
 
       <PhaseTrack phase={phase} />
 
-      <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-b from-white/[0.05] to-transparent px-4 py-7 sm:gap-8 sm:px-6 sm:py-8">
+      <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-gold-300/10 bg-gradient-to-b from-white/[0.04] to-transparent px-4 py-7 sm:gap-8 sm:px-6 sm:py-8">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <span className="font-brush text-[170px] leading-none text-gold-200/[0.04] select-none">
+            {phase === 'breathing' ? '气' : phase === 'holding' ? '定' : '归'}
+          </span>
+        </div>
         <div
           className={cn(
             'pointer-events-none absolute -top-28 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full blur-3xl',
-            phase === 'breathing' && 'bg-cyan-400/10',
-            phase === 'holding' && 'bg-amber-400/10',
-            phase === 'recovery' && 'bg-sky-400/10',
+            phase === 'breathing' && 'bg-gold-400/10',
+            phase === 'holding' && 'bg-gold-500/10',
+            phase === 'recovery' && 'bg-jade-400/10',
           )}
         />
         {phase === 'breathing' && (
@@ -395,7 +400,7 @@ function SessionConsole({
         size="lg"
         variant="outline"
         onClick={onStop}
-        className="h-11 w-full rounded-xl border-white/10 bg-white/[0.03] text-muted-foreground hover:bg-white/[0.08] hover:text-foreground"
+        className="h-11 w-full rounded-xl border-gold-300/15 bg-white/[0.03] text-muted-foreground hover:bg-gold-300/10 hover:text-gold-200"
       >
         <Square className="size-4" />
         Hentikan Sesi

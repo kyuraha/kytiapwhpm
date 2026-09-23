@@ -29,23 +29,23 @@ function useFullscreen() {
 const MODES = [
   {
     id: 'wimhof',
-    label: 'Wim Hof',
+    label: '吐纳 Tunà',
     Icon: Wind,
     activeClassName:
-      'bg-gradient-to-b from-cyan-400 to-sky-500 text-slate-950 shadow-lg shadow-cyan-500/30',
+      'bg-gradient-to-b from-gold-200 to-gold-400 text-[#241a08] shadow-lg shadow-gold-500/25',
   },
   {
     id: 'meditasi',
-    label: 'Meditasi',
+    label: '静坐 Jìngzuò',
     Icon: Flower2,
     activeClassName:
-      'bg-gradient-to-b from-emerald-400 to-teal-500 text-emerald-950 shadow-lg shadow-emerald-500/30',
+      'bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25',
   },
 ]
 
 function ModeSwitch({ value, onChange }) {
   return (
-    <div className="grid w-full shrink-0 grid-cols-2 gap-1.5 rounded-2xl border border-white/[0.06] bg-white/[0.04] p-1.5 backdrop-blur">
+    <div className="grid w-full shrink-0 grid-cols-2 gap-1.5 rounded-full border border-gold-300/10 bg-white/[0.03] p-1.5 backdrop-blur">
       {MODES.map(({ id, label, Icon, activeClassName }) => {
         const active = value === id
         return (
@@ -55,10 +55,10 @@ function ModeSwitch({ value, onChange }) {
             aria-pressed={active}
             onClick={() => onChange(id)}
             className={cn(
-              'inline-flex h-10 items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all sm:h-11',
+              'inline-flex h-10 items-center justify-center gap-2 rounded-full text-sm font-semibold tracking-wide transition-all sm:h-11',
               active
                 ? activeClassName
-                : 'text-muted-foreground hover:bg-white/[0.05] hover:text-foreground',
+                : 'text-muted-foreground hover:bg-white/[0.04] hover:text-foreground',
             )}
           >
             <Icon className="size-4" />
@@ -69,32 +69,60 @@ function ModeSwitch({ value, onChange }) {
     </div>
   )
 }
+function InkBackdrop() {
+  return (
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div className="absolute inset-0 bg-ink-950" />
+      <div className="absolute -top-44 left-1/2 h-[480px] w-[780px] -translate-x-1/2 rounded-full bg-jade-500/[0.07] blur-[130px] animate-mist" />
+      <div
+        className="absolute top-1/3 -left-52 h-96 w-96 rounded-full bg-gold-400/[0.06] blur-[120px] animate-mist"
+        style={{ animationDelay: '-5s' }}
+      />
+      <div
+        className="absolute -right-44 bottom-0 h-96 w-96 rounded-full bg-jade-400/[0.05] blur-[120px] animate-mist"
+        style={{ animationDelay: '-11s' }}
+      />
+      <div className="absolute inset-0 m-auto size-[160vmin] rounded-full border border-dashed border-gold-300/[0.05] animate-spin-slow" />
+      <div className="absolute inset-0 m-auto size-[112vmin] rounded-full border border-jade-300/[0.05] animate-spin-reverse" />
+    </div>
+  )
+}
+
+function SideScript({ children, className }) {
+  return (
+    <div
+      className={cn(
+        'pointer-events-none fixed inset-y-0 z-0 hidden items-center lg:flex',
+        className,
+      )}
+    >
+      <span className="font-brush text-2xl tracking-[0.45em] text-gold-300/[0.13] select-none [writing-mode:vertical-rl]">
+        {children}
+      </span>
+    </div>
+  )
+}
 
 function App() {
   const { isFullscreen, toggle } = useFullscreen()
   const [tab, setTab] = useState('wimhof')
 
   return (
-    <div className="dark relative isolate flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-[#0b1020]">
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[#0b1020]" />
-        <div className="absolute -top-48 right-0 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-indigo-500/[0.14] blur-[140px]" />
-        <div className="absolute top-1/3 -left-56 h-96 w-96 rounded-full bg-cyan-400/[0.08] blur-[120px]" />
-        <div className="absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-emerald-400/[0.07] blur-[120px]" />
-      </div>
+    <div className="dark relative isolate flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden bg-ink-950">
+      <InkBackdrop />
+      <SideScript className="left-8">气沉丹田 · 心若止水</SideScript>
+      <SideScript className="right-8">吐纳调息 · 静坐观心</SideScript>
 
-      <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center border-b border-white/[0.06] bg-[#0b1020]/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center border-b border-gold-300/10 bg-ink-950/85 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-2xl items-center justify-between px-4">
           <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500 shadow-lg shadow-cyan-500/20">
-              <Wind className="size-[18px] text-white" />
+            <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-gold-300/30 bg-gradient-to-br from-[#1d2a20] to-ink-900 shadow-lg shadow-gold-500/10">
+              <span className="font-brush text-lg leading-none text-gold-300">息</span>
             </div>
             <div>
-              <div className="text-sm leading-tight font-semibold tracking-tight">
-                Napas &amp; Meditasi
-              </div>
+              <div className="font-brush text-base leading-tight text-gold-200">静心斋</div>
               <div className="text-[11px] leading-tight text-muted-foreground">
-                Fokus. Nafas. Tenang.
+                Napas &amp; Meditasi
               </div>
             </div>
           </div>
@@ -103,25 +131,28 @@ function App() {
             size="icon-sm"
             onClick={toggle}
             aria-label={isFullscreen ? 'Keluar mode fokus' : 'Mode fokus layar penuh'}
-            className="border-white/10 bg-white/[0.03] text-muted-foreground hover:bg-white/[0.08] hover:text-foreground"
+            className="rounded-full border-gold-300/15 bg-white/[0.02] text-muted-foreground hover:bg-gold-300/10 hover:text-gold-200"
           >
             {isFullscreen ? <Minimize className="size-4" /> : <Maximize className="size-4" />}
           </Button>
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col overflow-hidden px-4 pt-2 pb-3 min-h-0">
+      <main className="mx-auto flex w-full max-w-2xl min-h-0 flex-1 flex-col overflow-hidden px-4 pt-2 pb-3">
         <section className="shrink-0 pt-2 pb-2.5 text-center sm:pt-3 sm:pb-3">
-          <h1 className="text-[22px] font-bold tracking-tight sm:text-2xl">Latihan Pernapasan Terpandu</h1>
-          <p className="mx-auto mt-1 max-w-[42ch] text-xs leading-relaxed text-muted-foreground sm:text-[13px]">
-            Satu tarikan bisa mengubah keadaan. Pilih Wim Hof untuk mengisi energi, atau meditasi
-            untuk menjernihkan pikiran.
+          <div className="font-brush text-lg text-gold-300/80 sm:text-xl">一呼一吸 · 皆是修行</div>
+          <h1 className="mt-0.5 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+            Latihan Pernapasan Terpandu
+          </h1>
+          <p className="mx-auto mt-1 max-w-[44ch] text-xs leading-relaxed text-muted-foreground sm:text-[13px]">
+            Pilih Tunà untuk menghimpun energi qi, atau Jìngzuò untuk menenangkan batin
+            sehening air telaga.
           </p>
         </section>
 
         <ModeSwitch value={tab} onChange={setTab} />
 
-        <div className="mt-2 flex flex-1 flex-col justify-center overflow-hidden min-h-0 sm:mt-3">
+        <div className="mt-2 flex min-h-0 flex-1 flex-col justify-center overflow-hidden sm:mt-3">
           <div className={cn('flex flex-col justify-center overflow-hidden', tab !== 'wimhof' && 'hidden')}>
             <WimHof />
           </div>

@@ -3,13 +3,30 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "Noto Serif SC", "Songti SC", "SimSun", Georgia, "Times New Roman", serif;
+  --font-brush: "Ma Shan Zheng", "Noto Serif SC", cursive;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --color-jade-300: #a8dcc0;
+  --color-jade-400: #84c9a4;
+  --color-jade-500: #5faf85;
+  --color-jade-600: #478a68;
+
+  --color-gold-200: #f0dcb0;
+  --color-gold-300: #e3c384;
+  --color-gold-400: #d4a95c;
+  --color-gold-500: #b98a3e;
+
+  --color-ink-900: #0e1611;
+  --color-ink-950: #090f0b;
 
   --animate-breathe: breathe 9s ease-in-out infinite;
   --animate-pulse-soft: pulse-soft 3.6s cubic-bezier(0, 0, 0.2, 1) infinite;
   --animate-recover-inhale: recover-inhale 2s ease-out forwards;
   --animate-recover-exhale: recover-exhale 7s ease-in forwards;
+  --animate-spin-slow: spin-slow 90s linear infinite;
+  --animate-spin-reverse: spin-reverse 140s linear infinite;
+  --animate-mist: mist 16s ease-in-out infinite;
 
   @keyframes breathe {
     0%,
@@ -52,8 +69,29 @@
       transform: scale(0.5);
     }
   }
-}
 
+  @keyframes spin-slow {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-reverse {
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+
+  @keyframes mist {
+    0%,
+    100% {
+      opacity: 0.7;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -89,30 +127,30 @@
 :root {
   color-scheme: dark;
   --radius: 0.7rem;
-  --background: #0b1020;
-  --foreground: #e9edf6;
-  --card: #10192b;
-  --card-foreground: #e9edf6;
-  --popover: #10192b;
-  --popover-foreground: #e9edf6;
-  --primary: #7c8cff;
-  --primary-foreground: #0b1020;
-  --secondary: #19243a;
-  --secondary-foreground: #dbe2f0;
-  --muted: #141d30;
-  --muted-foreground: #93a0b8;
-  --accent: #1b2740;
-  --accent-foreground: #e9edf6;
-  --destructive: #f87171;
-  --destructive-foreground: #fef2f2;
-  --border: color-mix(in oklab, #cdd6e4 14%, transparent);
-  --input: color-mix(in oklab, #cdd6e4 18%, transparent);
-  --ring: #7c8cff;
-  --chart-1: #22d3ee;
-  --chart-2: #34d399;
-  --chart-3: #818cf8;
-  --chart-4: #fbbf24;
-  --chart-5: #f472b6;
+  --background: #090f0b;
+  --foreground: #eae4d2;
+  --card: #101a14;
+  --card-foreground: #eae4d2;
+  --popover: #101a14;
+  --popover-foreground: #eae4d2;
+  --primary: #d4a95c;
+  --primary-foreground: #241a08;
+  --secondary: #18231c;
+  --secondary-foreground: #ddd5bd;
+  --muted: #131e17;
+  --muted-foreground: #95a18c;
+  --accent: #1b271f;
+  --accent-foreground: #eae4d2;
+  --destructive: #e0806f;
+  --destructive-foreground: #fdf3ef;
+  --border: color-mix(in oklab, #d8cba4 13%, transparent);
+  --input: color-mix(in oklab, #d8cba4 17%, transparent);
+  --ring: #d4a95c;
+  --chart-1: #d4a95c;
+  --chart-2: #84c9a4;
+  --chart-3: #e3c384;
+  --chart-4: #a8dcc0;
+  --chart-5: #b98a3e;
 }
 
 html,
@@ -136,6 +174,6 @@ body {
     @apply bg-background font-sans text-foreground antialiased;
   }
   ::selection {
-    background: color-mix(in oklab, #7c8cff 35%, transparent);
+    background: color-mix(in oklab, #d4a95c 32%, transparent);
   }
 }

@@ -42,15 +42,25 @@ function Stepper({ label, value, onInc, onDec, decDisabled = false, incDisabled 
 function ZenAmbience() {
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-      <div className="absolute size-72 rounded-full border border-emerald-400/10 animate-breathe" />
+      <div className="absolute size-72 rounded-full border border-jade-400/10 animate-breathe" />
       <div
-        className="absolute size-72 rounded-full border border-emerald-400/[0.07] animate-breathe"
+        className="absolute size-72 rounded-full border border-jade-400/[0.07] animate-breathe"
         style={{ animationDelay: '-3s' }}
       />
       <div
-        className="absolute size-72 rounded-full border border-teal-300/[0.05] animate-breathe"
+        className="absolute size-72 rounded-full border border-gold-300/[0.06] animate-breathe"
         style={{ animationDelay: '-6s' }}
       />
+    </div>
+  )
+}
+
+function BrushMark({ char }) {
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <span className="font-brush text-[160px] leading-none text-jade-300/[0.045] select-none sm:text-[190px]">
+        {char}
+      </span>
     </div>
   )
 }
@@ -59,14 +69,14 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
   const presetActive = (m) => m === minutes && seconds === 0
 
   return (
-    <Card className="border-emerald-400/15 bg-gradient-to-b from-emerald-400/[0.07] to-transparent shadow-2xl shadow-black/40">
+    <Card className="border-jade-400/15 bg-gradient-to-b from-jade-400/[0.07] to-transparent shadow-2xl shadow-black/40">
       <CardContent className="flex flex-col gap-4 p-4 sm:gap-5 sm:p-5">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/20">
-              <Flower2 className="size-5 text-emerald-950" />
+            <div className="flex size-10 items-center justify-center rounded-full border border-jade-300/30 bg-gradient-to-br from-jade-300 to-jade-500 shadow-lg shadow-jade-500/20">
+              <Flower2 className="size-5 text-[#0f231a]" />
             </div>
             <div>
-              <div className="text-sm font-semibold tracking-tight text-foreground">Ruang Hening</div>
+              <div className="text-sm font-semibold tracking-tight text-foreground">Ruang Hening · 静坐</div>
               <div className="text-xs leading-snug text-muted-foreground">
                 Hadir sepenuhnya — beberapa menit cukup untuk menjernihkan pikiran.
               </div>
@@ -107,7 +117,7 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
                 className={cn(
                   'h-9 rounded-lg px-3.5 text-sm font-medium transition-colors',
                   presetActive(m)
-                    ? 'bg-gradient-to-b from-emerald-400 to-teal-500 text-emerald-950 shadow-md shadow-emerald-500/25'
+                    ? 'bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-md shadow-jade-500/25'
                     : 'border border-white/10 bg-white/[0.03] text-muted-foreground hover:text-foreground',
                 )}
               >
@@ -117,9 +127,9 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl border border-emerald-400/15 bg-[#0b1020]/60 px-4 py-4 text-center">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-emerald-400/[0.06] to-transparent" />
-          <div className="relative font-mono text-4xl font-semibold tracking-tight tabular-nums text-emerald-100">
+        <div className="relative overflow-hidden rounded-xl border border-jade-400/15 bg-ink-950/70 px-4 py-4 text-center">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-jade-400/[0.06] to-transparent" />
+          <div className="relative font-mono text-4xl font-semibold tracking-tight tabular-nums text-jade-300">
             {formatTime(totalSeconds)}
           </div>
           <div className="relative mt-1 text-xs tracking-wide text-muted-foreground">durasi sesi</div>
@@ -130,7 +140,7 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
 
         <Button
           size="lg"
-          className="h-12 w-full rounded-xl bg-gradient-to-b from-emerald-400 to-teal-500 text-emerald-950 shadow-lg shadow-emerald-500/25 hover:from-emerald-300 hover:to-teal-400"
+          className="h-12 w-full rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400"
           onClick={onStart}
         >
           <Play className="size-4" />
@@ -143,8 +153,9 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
 
 function RunningView({ status, remaining, progress, onPause, onResume, onStop }) {
   return (
-    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-emerald-400/15 bg-gradient-to-b from-emerald-400/[0.06] to-transparent px-4 py-6 sm:gap-8 sm:py-8">
+    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-jade-400/15 bg-gradient-to-b from-jade-400/[0.06] to-transparent px-4 py-6 sm:gap-8 sm:py-8">
       <ZenAmbience />
+      <BrushMark char="禅" />
 
       <div className="relative flex items-center justify-center">
         <ProgressRing
@@ -152,14 +163,14 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
           progress={progress}
           size={240}
           stroke={11}
-          startColor="#34d399"
-          endColor="#14b8a6"
+          startColor="#a8dcc0"
+          endColor="#478a68"
         >
           <div className="text-center">
-            <div className="font-mono text-4xl font-semibold tracking-tight tabular-nums text-emerald-50 sm:text-5xl">
+            <div className="font-mono text-4xl font-semibold tracking-tight tabular-nums text-foreground sm:text-5xl">
               {formatTime(remaining)}
             </div>
-            <div className="mt-1 text-[11px] font-medium tracking-widest text-emerald-300/60 uppercase">
+            <div className="mt-1 text-[11px] font-medium tracking-widest text-jade-400/70 uppercase">
               {status === 'paused' ? 'dijeda' : 'meditasi'}
             </div>
           </div>
@@ -170,7 +181,7 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
         {status === 'running' ? (
           <Button
             size="lg"
-            className="h-12 min-w-40 rounded-xl bg-gradient-to-b from-emerald-400 to-teal-500 text-emerald-950 shadow-lg shadow-emerald-500/25 hover:from-emerald-300 hover:to-teal-400"
+            className="h-12 min-w-40 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400"
             onClick={onPause}
           >
             <Pause className="size-4" />
@@ -179,7 +190,7 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
         ) : (
           <Button
             size="lg"
-            className="h-12 min-w-40 rounded-xl bg-gradient-to-b from-emerald-400 to-teal-500 text-emerald-950 shadow-lg shadow-emerald-500/25 hover:from-emerald-300 hover:to-teal-400"
+            className="h-12 min-w-40 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400"
             onClick={onResume}
           >
             <Play className="size-4" />
@@ -190,7 +201,7 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
           size="lg"
           variant="outline"
           onClick={onStop}
-          className="h-12 min-w-32 rounded-xl border-white/10 bg-white/[0.03] text-muted-foreground hover:bg-white/[0.08] hover:text-foreground"
+          className="h-12 min-w-32 rounded-xl border-jade-300/15 bg-white/[0.03] text-muted-foreground hover:bg-jade-400/10 hover:text-jade-300"
         >
           <RotateCcw className="size-4" />
           Selesai
@@ -202,8 +213,9 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
 
 function FinishedView({ minutes, onAgain }) {
   return (
-    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-emerald-400/15 bg-gradient-to-b from-emerald-400/[0.06] to-transparent px-4 py-6 text-center sm:gap-8 sm:py-8">
+    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-jade-400/15 bg-gradient-to-b from-jade-400/[0.06] to-transparent px-4 py-6 text-center sm:gap-8 sm:py-8">
       <ZenAmbience />
+      <BrushMark char="悟" />
 
       <div className="relative">
         <ProgressRing
@@ -211,17 +223,18 @@ function FinishedView({ minutes, onAgain }) {
           progress={1}
           size={168}
           stroke={10}
-          startColor="#34d399"
-          endColor="#14b8a6"
+          startColor="#a8dcc0"
+          endColor="#478a68"
         >
-          <div className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/30">
-            <Check className="size-6 text-emerald-950" />
+          <div className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-jade-300 to-jade-500 shadow-lg shadow-jade-500/30">
+            <Check className="size-6 text-[#0f231a]" />
           </div>
         </ProgressRing>
       </div>
 
       <div className="relative flex flex-col items-center gap-2">
-        <div className="text-2xl font-semibold tracking-tight text-emerald-50">Sesi Selesai</div>
+        <div className="font-brush text-lg text-jade-300/80">功德圆满</div>
+        <div className="text-2xl font-semibold tracking-tight text-foreground">Sesi Selesai</div>
         <p className="max-w-sm text-sm text-muted-foreground">
           Meditasi {minutes} menit telah usai. Semoga pikiranmu lebih tenang dan hadir.
         </p>
@@ -229,7 +242,7 @@ function FinishedView({ minutes, onAgain }) {
 
       <Button
         size="lg"
-        className="relative h-12 min-w-52 rounded-xl bg-gradient-to-b from-emerald-400 to-teal-500 text-emerald-950 shadow-lg shadow-emerald-500/25 hover:from-emerald-300 hover:to-teal-400"
+        className="relative h-12 min-w-52 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400"
         onClick={onAgain}
       >
         <RotateCcw className="size-4" />

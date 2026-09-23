@@ -7,7 +7,7 @@ export function ProgressRing({
   stroke = 10,
   startColor = '#22d3ee',
   endColor = '#6366f1',
-  trackClassName = 'stroke-white/[0.06]',
+  trackClassName = 'stroke-[#d8cba4]/10',
   className,
   children,
 }) {
