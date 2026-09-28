@@ -50,7 +50,7 @@ function FlowSteps({ count }) {
     <div>
       <div className="mb-2 flex items-baseline justify-between">
         <div className="text-[11px] font-semibold tracking-widest text-muted-foreground uppercase">
-          一周天 · Alur Satu Putaran
+          Alur Satu Putaran
         </div>
         <div className="hidden text-[11px] text-muted-foreground/60 sm:block">Mengalir otomatis</div>
       </div>
@@ -385,7 +385,7 @@ function SessionConsole({
       <div className="flex items-center justify-center">
         <div className="flex items-center gap-2 rounded-full border border-gold-300/15 bg-white/[0.04] px-3.5 py-1 text-xs font-medium text-muted-foreground sm:px-4 sm:py-1.5">
           <span className="size-1.5 animate-pulse rounded-full bg-gold-400" />
-          第 {rounds + 1} 周天 ·{' '}
+          Putaran {rounds + 1} ·{' '}
           {phase === 'breathing' ? 'Bernapas' : phase === 'holding' ? 'Menahan' : 'Pemulihan'}
         </div>
       </div>

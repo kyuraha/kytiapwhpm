@@ -30,14 +30,14 @@ function useFullscreen() {
 const MODES = [
   {
     id: 'wimhof',
-    label: '吐纳 Tunà',
+    label: 'Napas',
     Icon: Wind,
     activeClassName:
       'bg-gradient-to-b from-gold-200 to-gold-400 text-[#241a08] shadow-lg shadow-gold-500/25',
   },
   {
     id: 'meditasi',
-    label: '静坐 Jìngzuò',
+    label: 'Semedi',
     Icon: Flower2,
     activeClassName:
       'bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25',
@@ -146,7 +146,7 @@ function App() {
             <div className="min-w-0">
               <div className="truncate font-brush text-base leading-tight text-gold-200">静心斋</div>
               <div className="truncate text-[11px] leading-tight text-muted-foreground">
-                Napas &amp; Meditasi
+                Napas &amp; Semedi
               </div>
             </div>
           </div>
@@ -169,8 +169,8 @@ function App() {
             Latihan Pernapasan Terpandu
           </h1>
           <p className="mx-auto mt-1 max-w-[44ch] text-xs leading-relaxed text-muted-foreground sm:text-[13px] tight:hidden">
-            Pilih Tunà untuk menghimpun energi qi, atau Jìngzuò untuk menenangkan batin
-            sehening air telaga.
+            Pilih Napas untuk latihan pernapasan berputar, atau Semedi untuk menenangkan
+            batin.
           </p>
         </section>
 

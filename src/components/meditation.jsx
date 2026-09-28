@@ -78,7 +78,7 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
               <Flower2 className="size-5 text-[#0f231a]" />
             </div>
             <div className="min-w-0">
-              <div className="text-sm font-semibold tracking-tight text-foreground">Ruang Hening · 静坐</div>
+              <div className="text-sm font-semibold tracking-tight text-foreground">Ruang Semedi</div>
               <div className="text-xs leading-snug text-muted-foreground">
                 Hadir sepenuhnya — beberapa menit cukup untuk menjernihkan pikiran.
               </div>
