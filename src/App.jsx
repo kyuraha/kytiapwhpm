@@ -4,6 +4,7 @@ import { Flower2, Maximize, Minimize, Wind } from 'lucide-react'
 import { Button } from '#components/ui/button'
 import { WimHof } from '#components/wim-hof'
 import { Meditation } from '#components/meditation'
+import { useFitScale } from '#hooks/use-fit-scale'
 import { cn } from '#lib/utils'
 
 function useFullscreen() {
@@ -55,7 +56,7 @@ function ModeSwitch({ value, onChange }) {
             aria-pressed={active}
             onClick={() => onChange(id)}
             className={cn(
-              'inline-flex h-10 items-center justify-center gap-2 rounded-full text-sm font-semibold tracking-wide transition-all sm:h-11',
+              'inline-flex h-[clamp(2.25rem,7dvh,2.75rem)] items-center justify-center gap-2 rounded-full text-sm font-semibold tracking-wide transition-all',
               active
                 ? activeClassName
                 : 'text-muted-foreground hover:bg-white/[0.04] hover:text-foreground',
@@ -103,6 +104,29 @@ function SideScript({ children, className }) {
   )
 }
 
+function Stage({ children }) {
+  const { frameRef, contentRef, scale } = useFitScale()
+
+  return (
+    <div
+      ref={frameRef}
+      className="size-container mt-2 flex min-h-0 flex-1 flex-col overflow-hidden sm:mt-3"
+    >
+      <div
+        ref={contentRef}
+        className="my-auto flex shrink-0 origin-top-left flex-col"
+        style={
+          scale < 1
+            ? { width: `${100 / scale}%`, transform: `scale(${scale})` }
+            : undefined
+        }
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
 function App() {
   const { isFullscreen, toggle } = useFullscreen()
   const [tab, setTab] = useState('wimhof')
@@ -113,15 +137,15 @@ function App() {
       <SideScript className="left-8">气沉丹田 · 心若止水</SideScript>
       <SideScript className="right-8">吐纳调息 · 静坐观心</SideScript>
 
-      <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center border-b border-gold-300/10 bg-ink-950/85 backdrop-blur-xl">
+      <header className="sticky top-0 z-20 flex h-[clamp(3rem,7.6dvh,3.5rem)] shrink-0 items-center border-b border-gold-300/10 bg-ink-950/85 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-2xl items-center justify-between px-4">
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-gold-300/30 bg-gradient-to-br from-[#1d2a20] to-ink-900 shadow-lg shadow-gold-500/10">
               <span className="font-brush text-lg leading-none text-gold-300">息</span>
             </div>
-            <div>
-              <div className="font-brush text-base leading-tight text-gold-200">静心斋</div>
-              <div className="text-[11px] leading-tight text-muted-foreground">
+            <div className="min-w-0">
+              <div className="truncate font-brush text-base leading-tight text-gold-200">静心斋</div>
+              <div className="truncate text-[11px] leading-tight text-muted-foreground">
                 Napas &amp; Meditasi
               </div>
             </div>
@@ -138,13 +162,13 @@ function App() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-2xl min-h-0 flex-1 flex-col overflow-hidden px-4 pt-2 pb-3">
-        <section className="shrink-0 pt-2 pb-2.5 text-center sm:pt-3 sm:pb-3">
+      <main className="size-container mx-auto flex w-full max-w-2xl min-h-0 flex-1 flex-col overflow-hidden px-4 pt-2 pb-3">
+        <section className="shrink-0 pt-2 pb-2.5 text-center sm:pt-3 sm:pb-3 tiny:hidden">
           <div className="font-brush text-lg text-gold-300/80 sm:text-xl">一呼一吸 · 皆是修行</div>
           <h1 className="mt-0.5 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
             Latihan Pernapasan Terpandu
           </h1>
-          <p className="mx-auto mt-1 max-w-[44ch] text-xs leading-relaxed text-muted-foreground sm:text-[13px]">
+          <p className="mx-auto mt-1 max-w-[44ch] text-xs leading-relaxed text-muted-foreground sm:text-[13px] tight:hidden">
             Pilih Tunà untuk menghimpun energi qi, atau Jìngzuò untuk menenangkan batin
             sehening air telaga.
           </p>
@@ -152,14 +176,14 @@ function App() {
 
         <ModeSwitch value={tab} onChange={setTab} />
 
-        <div className="mt-2 flex min-h-0 flex-1 flex-col justify-center overflow-hidden sm:mt-3">
-          <div className={cn('flex flex-col justify-center overflow-hidden', tab !== 'wimhof' && 'hidden')}>
+        <Stage>
+          <div className={cn('flex flex-col', tab !== 'wimhof' && 'hidden')}>
             <WimHof />
           </div>
-          <div className={cn('flex flex-col justify-center overflow-hidden', tab !== 'meditasi' && 'hidden')}>
+          <div className={cn('flex flex-col', tab !== 'meditasi' && 'hidden')}>
             <Meditation />
           </div>
-        </div>
+        </Stage>
       </main>
     </div>
   )

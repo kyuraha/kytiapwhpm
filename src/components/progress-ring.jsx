@@ -1,9 +1,13 @@
 import { cn } from '#lib/utils'
 
+/** Ring box that follows the viewport height so the stage always fits. */
+export const RING_BOX = 'min(240px, 30dvh)'
+
 export function ProgressRing({
   id,
   progress = 0,
   size = 240,
+  box = `${size}px`,
   stroke = 10,
   startColor = '#22d3ee',
   endColor = '#6366f1',
@@ -17,8 +21,11 @@ export function ProgressRing({
   const offset = circumference * (1 - clamped)
 
   return (
-    <div className={cn('relative', className)} style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="-rotate-90">
+    <div
+      className={cn('@container relative aspect-square max-w-full', className)}
+      style={{ width: box }}
+    >
+      <svg viewBox={`0 0 ${size} ${size}`} className="size-full -rotate-90">
         <circle
           cx={size / 2}
           cy={size / 2}

@@ -3,7 +3,7 @@ import { ChevronRight, Minus, Play, Plus, Square, Timer, Wind } from 'lucide-rea
 
 import { Button } from '#components/ui/button'
 import { Card, CardContent } from '#components/ui/card'
-import { ProgressRing } from '#components/progress-ring'
+import { ProgressRing, RING_BOX } from '#components/progress-ring'
 import { cn } from '#lib/utils'
 import {
   initAudio,
@@ -54,20 +54,26 @@ function FlowSteps({ count }) {
         </div>
         <div className="hidden text-[11px] text-muted-foreground/60 sm:block">Mengalir otomatis</div>
       </div>
-      <p className="mb-2.5 text-xs leading-relaxed text-muted-foreground">
+      <p className="mb-2.5 text-xs leading-relaxed text-muted-foreground tight:hidden">
         Tiga fase yang mengalir tanpa jeda. Bernapaslah rileks dan dengarkan tubuhmu.
       </p>
       <div className="flex flex-row gap-1.5 sm:gap-2">
         {steps.map((step, i) => (
-          <div key={step.title} className="flex flex-1 items-center gap-1 sm:gap-2">
-            <div className="flex flex-1 flex-col items-center gap-1.5 rounded-xl border border-white/[0.06] bg-white/[0.03] px-1.5 py-2.5 text-center sm:flex-row sm:items-start sm:gap-3 sm:p-3 sm:text-left">
+          <div key={step.title} className="flex min-w-0 flex-1 items-center gap-1 sm:gap-2">
+            <div className="flex min-w-0 flex-1 flex-col items-center gap-1.5 rounded-xl border border-white/[0.06] bg-white/[0.03] px-1.5 py-2.5 text-center sm:flex-row sm:items-start sm:gap-3 sm:p-3 sm:text-left tight:py-1.5">
               <div className="flex size-5 shrink-0 items-center justify-center rounded-full bg-gold-400/10 text-[10px] font-bold text-gold-300 sm:size-6 sm:text-[11px]">
                 {i + 1}
               </div>
               <div className="min-w-0">
-                <div className="text-[11px] font-semibold leading-tight text-foreground sm:text-sm">{step.title}</div>
-                <div className="hidden text-[10px] leading-snug text-muted-foreground sm:block sm:text-xs">{step.desc}</div>
-                <div className="text-[10px] leading-none text-muted-foreground sm:hidden">{step.desc.split(' ')[0]}</div>
+                <div className="text-[11px] font-semibold leading-tight text-foreground sm:text-sm">
+                  {step.title}
+                </div>
+                <div className="hidden text-[10px] leading-snug text-muted-foreground sm:block sm:text-xs">
+                  {step.desc}
+                </div>
+                <div className="text-[10px] leading-none text-muted-foreground sm:hidden">
+                  {step.desc.split(' ')[0]}
+                </div>
               </div>
             </div>
             {i < steps.length - 1 && (
@@ -87,7 +93,7 @@ function StepperBtn({ label, onClick, disabled }) {
       aria-label={label}
       onClick={onClick}
       disabled={disabled}
-      className="grid size-9 place-items-center rounded-lg text-foreground transition-colors hover:bg-white/[0.07] disabled:pointer-events-none disabled:opacity-35"
+      className="grid size-8 place-items-center rounded-lg text-foreground transition-colors hover:bg-white/[0.07] disabled:pointer-events-none disabled:opacity-35 sm:size-9"
     >
       {label === 'kurangi' ? <Minus className="size-4" /> : <Plus className="size-4" />}
     </button>
@@ -100,51 +106,51 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
   }
 
   return (
-    <Card className="border-gold-300/10 bg-gradient-to-b from-gold-300/[0.05] to-transparent shadow-2xl shadow-black/40">
-      <CardContent className="flex flex-col gap-5 p-4 sm:gap-6 sm:p-5">
+    <Card className="border-gold-300/10 bg-gradient-to-b from-gold-300/[0.05] to-transparent py-0 shadow-2xl shadow-black/40">
+      <CardContent className="flex flex-col gap-[clamp(0.5rem,2.4dvh,1.5rem)] p-[clamp(0.75rem,2dvh,1.25rem)] wide-short:grid wide-short:grid-cols-2">
         <FlowSteps count={breathCount} />
 
         <div className="flex flex-col divide-y divide-white/[0.06] overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.03]">
-          <div className="flex flex-col gap-3 p-3.5 sm:flex-row sm:items-center sm:justify-between sm:p-4">
-            <div className="flex gap-2.5">
-              <div className="hidden size-8 items-center justify-center rounded-full bg-gold-400/10 text-gold-300 sm:flex">
+          <div className="flex items-center justify-between gap-2 p-[clamp(0.625rem,1.8dvh,1rem)]">
+            <div className="flex min-w-0 gap-2.5">
+              <div className="hidden size-8 shrink-0 items-center justify-center rounded-full bg-gold-400/10 text-gold-300 sm:flex">
                 <Wind className="size-4" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="text-sm font-semibold text-foreground">Jumlah napas per putaran</div>
-                <div className="mt-0.5 max-w-[28ch] text-xs leading-snug text-muted-foreground">
+                <div className="mt-0.5 max-w-[28ch] text-xs leading-snug text-muted-foreground tight:hidden">
                   Rekomendasi pemula 30. Rentang 10–100 — dengarkan kenyamananmu.
                 </div>
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-1 self-start rounded-xl border border-gold-300/15 bg-ink-900 p-1 sm:self-auto">
+            <div className="flex shrink-0 items-center gap-1 self-center rounded-xl border border-gold-300/15 bg-ink-900 p-1">
               <StepperBtn label="kurangi" onClick={() => adjust(-5)} disabled={breathCount <= BREATH_MIN} />
-              <div className="w-12 text-center font-mono text-lg font-semibold tabular-nums text-foreground">
+              <div className="w-10 text-center font-mono text-base font-semibold tabular-nums text-foreground sm:w-12 sm:text-lg">
                 {breathCount}
               </div>
               <StepperBtn label="tambah" onClick={() => adjust(5)} disabled={breathCount >= BREATH_MAX} />
             </div>
           </div>
-          <div className="flex flex-col gap-3 p-3.5 sm:flex-row sm:items-center sm:justify-between sm:p-4">
-            <div className="flex gap-2.5">
-              <div className="hidden size-8 items-center justify-center rounded-full bg-jade-400/10 text-jade-400 sm:flex">
+          <div className="flex items-center justify-between gap-2 p-[clamp(0.625rem,1.8dvh,1rem)]">
+            <div className="flex min-w-0 gap-2.5">
+              <div className="hidden size-8 shrink-0 items-center justify-center rounded-full bg-jade-400/10 text-jade-400 sm:flex">
                 <Timer className="size-4" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="text-sm font-semibold text-foreground">Tempo irama napas</div>
-                <div className="mt-0.5 max-w-[28ch] text-xs leading-snug text-muted-foreground">
+                <div className="mt-0.5 max-w-[28ch] text-xs leading-snug text-muted-foreground tight:hidden">
                   Cepat berenergi, Lambat menenangkan. Normal cocok untuk kebanyakan sesi.
                 </div>
               </div>
             </div>
-            <div className="flex shrink-0 gap-1 self-start rounded-full border border-gold-300/15 bg-ink-900 p-1 sm:self-auto">
+            <div className="flex shrink-0 gap-1 self-center rounded-full border border-gold-300/15 bg-ink-900 p-1">
               {TEMPOS.map((t) => (
                 <button
                   key={t.id}
                   type="button"
                   onClick={() => setTempoId(t.id)}
                   className={cn(
-                    'h-8 rounded-full px-3.5 text-sm font-medium transition-colors',
+                    'h-8 rounded-full px-3 text-sm font-medium transition-colors sm:px-3.5',
                     tempoId === t.id
                       ? 'bg-gold-200 text-[#241a08] shadow'
                       : 'text-muted-foreground hover:text-foreground',
@@ -157,7 +163,7 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex flex-col items-center gap-3 wide-short:col-span-2">
           <Button
             size="lg"
             className="h-12 w-full rounded-xl bg-gradient-to-b from-gold-200 to-gold-400 text-[#241a08] shadow-lg shadow-gold-500/25 hover:from-gold-200 hover:to-gold-300 sm:w-72"
@@ -166,7 +172,7 @@ function IdleView({ breathCount, setBreathCount, tempoId, setTempoId, onStart })
             <Play className="size-4" />
             Mulai Sesi
           </Button>
-          <p className="max-w-sm text-center text-[11px] leading-relaxed text-muted-foreground/80 sm:text-xs">
+          <p className="max-w-sm text-center text-[11px] leading-relaxed text-muted-foreground/80 sm:text-xs tight:hidden">
             Praktikkan di tempat aman dan nyaman — hindari di dalam air atau saat berkendara. Jika
             pusing atau tidak nyaman, hentikan dan kembali ke napas alami.
           </p>
@@ -211,29 +217,30 @@ function PhaseTrack({ phase }) {
 
 function BreathingStage({ count, current, orbRef }) {
   return (
-    <div className="relative flex flex-col items-center gap-5">
+    <div className="relative flex flex-col items-center gap-4 sm:gap-5">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="size-56 rounded-full border border-gold-300/15 animate-pulse-soft sm:size-60" />
+        <div className="size-[min(15rem,32dvh)] rounded-full border border-gold-300/15 animate-pulse-soft" />
       </div>
       <ProgressRing
         id="wim-breathe"
         progress={current / count}
         size={240}
+        box={RING_BOX}
         stroke={11}
         startColor="#e3c384"
         endColor="#b98a3e"
       >
-        <div className="relative flex size-[190px] items-center justify-center sm:size-[210px]">
+        <div className="relative flex size-[79%] items-center justify-center">
           <div
             ref={orbRef}
             className="absolute inset-0 rounded-full bg-gradient-to-br from-gold-200 to-gold-500 opacity-95 shadow-[0_0_60px_14px_rgba(212,169,92,0.35)] will-change-transform"
-            style={{ transform: 'scale(0.55)' }}
+            style={{ transform: 'scale(0.72)' }}
           />
           <div className="relative text-center text-[#241a08]">
-            <div className="font-mono text-5xl font-semibold tracking-tight tabular-nums sm:text-6xl">
+            <div className="font-mono text-[25cqw] leading-none font-semibold tracking-tight tabular-nums">
               {Math.min(current + 1, count)}
             </div>
-            <div className="text-[11px] font-semibold tracking-widest opacity-80 uppercase">
+            <div className="mt-0.5 text-[4cqw] font-semibold tracking-widest opacity-80 uppercase">
               dari {count} napas
             </div>
           </div>
@@ -248,18 +255,18 @@ function BreathingStage({ count, current, orbRef }) {
 
 function HoldingStage({ elapsed, onHoldDone }) {
   return (
-    <div className="relative flex flex-col items-center gap-5">
-      <div className="relative flex size-48 items-center justify-center rounded-full border border-gold-400/25 bg-gold-400/[0.05] sm:size-52">
+    <div className="relative flex flex-col items-center gap-4 sm:gap-5">
+      <div className="@container relative flex size-[min(12.5rem,27dvh)] items-center justify-center rounded-full border border-gold-400/25 bg-gold-400/[0.05]">
         <div className="absolute -inset-5 rounded-full border border-gold-400/10 animate-breathe sm:-inset-6" />
         <div
           className="absolute -inset-8 rounded-full border border-gold-400/[0.06] animate-breathe sm:-inset-12"
           style={{ animationDelay: '-4.5s' }}
         />
         <div className="relative text-center">
-          <div className="font-mono text-5xl font-semibold tracking-tight tabular-nums text-foreground sm:text-6xl">
+          <div className="font-mono text-[28cqw] leading-none font-semibold tracking-tight tabular-nums text-foreground">
             {formatTime(elapsed)}
           </div>
-          <div className="mt-1 text-[11px] font-medium tracking-widest text-gold-300/70 uppercase">
+          <div className="mt-1 text-[4.6cqw] font-medium tracking-widest text-gold-300/70 uppercase">
             tahan napas
           </div>
         </div>
@@ -282,16 +289,21 @@ function HoldingStage({ elapsed, onHoldDone }) {
 function RecoveryStage({ stage, remaining, rounds }) {
   if (stage === 'inhale') {
     return (
-      <div className="relative flex flex-col items-center gap-5">
-        <div className="relative flex size-56 items-center justify-center sm:size-60">
+      <div className="relative flex flex-col items-center gap-4 sm:gap-5">
+        <div className="relative flex size-[min(15rem,28dvh)] items-center justify-center">
           <div
             key={`inhale-${rounds}`}
-            className="absolute size-48 rounded-full bg-gradient-to-br from-jade-300 to-jade-600 shadow-[0_0_60px_14px_rgba(132,201,164,0.35)] animate-recover-inhale sm:size-52"
-          />
-          <div className="relative flex flex-col items-center gap-1 text-[#0f231a]">
-            <Wind className="size-8 sm:size-9" />
-            <div className="text-lg font-bold tracking-tight sm:text-xl">Tarik Napas Penuh</div>
-            <div className="text-[10px] font-medium tracking-widest opacity-70 uppercase">satu tarikan dalam</div>
+            className="absolute inset-0 flex items-center justify-center rounded-full bg-gradient-to-br from-jade-300 to-jade-600 shadow-[0_0_60px_14px_rgba(132,201,164,0.35)] animate-recover-inhale"
+          >
+            <div className="flex flex-col items-center gap-1 px-3 text-center text-[#0f231a]">
+              <Wind className="size-[min(2rem,6dvh)] shrink-0 sm:size-9" />
+              <div className="text-[min(1.1rem,3.8dvh)] leading-tight font-bold tracking-tight">
+                Tarik Napas Penuh
+              </div>
+              <div className="text-[9px] font-medium tracking-widest opacity-70 uppercase">
+                satu tarikan dalam
+              </div>
+            </div>
           </div>
         </div>
         <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground sm:text-sm">
@@ -303,16 +315,21 @@ function RecoveryStage({ stage, remaining, rounds }) {
 
   if (stage === 'exhale') {
     return (
-      <div className="relative flex flex-col items-center gap-5">
-        <div className="relative flex size-56 items-center justify-center sm:size-60">
+      <div className="relative flex flex-col items-center gap-4 sm:gap-5">
+        <div className="relative flex size-[min(15rem,28dvh)] items-center justify-center">
           <div
             key={`exhale-${rounds}`}
-            className="absolute size-52 rounded-full bg-gradient-to-br from-jade-300 to-jade-600 shadow-[0_0_60px_14px_rgba(132,201,164,0.35)] animate-recover-exhale sm:size-52"
-          />
-          <div className="relative flex flex-col items-center gap-1 text-[#0f231a]">
-            <Wind className="size-8 sm:size-9 opacity-80" />
-            <div className="text-lg font-bold tracking-tight sm:text-xl">Buang Napas</div>
-            <div className="text-[10px] font-medium tracking-widest opacity-70 uppercase">perlahan & rileks</div>
+            className="absolute inset-0 flex items-center justify-center rounded-full bg-gradient-to-br from-jade-300 to-jade-600 shadow-[0_0_60px_14px_rgba(132,201,164,0.35)] animate-recover-exhale"
+          >
+            <div className="flex flex-col items-center gap-1 px-3 text-center text-[#0f231a]">
+              <Wind className="size-[min(2rem,6dvh)] shrink-0 opacity-80 sm:size-9" />
+              <div className="text-[min(1.1rem,3.8dvh)] leading-tight font-bold tracking-tight">
+                Buang Napas
+              </div>
+              <div className="text-[9px] font-medium tracking-widest opacity-70 uppercase">
+                perlahan &amp; rileks
+              </div>
+            </div>
           </div>
         </div>
         <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground sm:text-sm">
@@ -323,21 +340,22 @@ function RecoveryStage({ stage, remaining, rounds }) {
   }
 
   return (
-    <div className="relative flex flex-col items-center gap-5">
+    <div className="relative flex flex-col items-center gap-4 sm:gap-5">
       <ProgressRing
         id="wim-recover"
         progress={remaining / RECOVERY_SECONDS}
         size={240}
+        box={RING_BOX}
         stroke={11}
         startColor="#a8dcc0"
         endColor="#478a68"
       >
-        <div className="flex size-52 items-center justify-center rounded-full bg-gradient-to-br from-jade-400 to-jade-600 animate-breathe sm:size-56">
+        <div className="flex size-[87%] items-center justify-center rounded-full bg-gradient-to-br from-jade-400 to-jade-600 animate-breathe">
           <div className="text-center text-[#0f231a]">
-            <div className="font-mono text-5xl font-semibold tracking-tight tabular-nums sm:text-6xl">
+            <div className="font-mono text-[25cqw] leading-none font-semibold tabular-nums">
               {remaining}
             </div>
-            <div className="text-[11px] font-semibold tracking-widest opacity-80 uppercase">
+            <div className="mt-0.5 text-[4cqw] font-semibold tracking-widest opacity-80 uppercase">
               tahan
             </div>
           </div>
@@ -363,19 +381,20 @@ function SessionConsole({
   onStop,
 }) {
   return (
-    <div className="flex flex-col gap-4 sm:gap-5">
+    <div className="flex flex-col gap-[clamp(0.625rem,2.4dvh,1.25rem)]">
       <div className="flex items-center justify-center">
         <div className="flex items-center gap-2 rounded-full border border-gold-300/15 bg-white/[0.04] px-3.5 py-1 text-xs font-medium text-muted-foreground sm:px-4 sm:py-1.5">
           <span className="size-1.5 animate-pulse rounded-full bg-gold-400" />
-          第 {rounds + 1} 周天 · {phase === 'breathing' ? 'Bernapas' : phase === 'holding' ? 'Menahan' : 'Pemulihan'}
+          第 {rounds + 1} 周天 ·{' '}
+          {phase === 'breathing' ? 'Bernapas' : phase === 'holding' ? 'Menahan' : 'Pemulihan'}
         </div>
       </div>
 
       <PhaseTrack phase={phase} />
 
-      <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-gold-300/10 bg-gradient-to-b from-white/[0.04] to-transparent px-4 py-7 sm:gap-8 sm:px-6 sm:py-8">
+      <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-gold-300/10 bg-gradient-to-b from-white/[0.04] to-transparent px-4 py-[clamp(1rem,3.2dvh,2rem)] sm:px-6">
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="font-brush text-[170px] leading-none text-gold-200/[0.04] select-none">
+          <span className="font-brush text-[clamp(5rem,26dvh,170px)] leading-none text-gold-200/[0.04] select-none">
             {phase === 'breathing' ? '气' : phase === 'holding' ? '定' : '归'}
           </span>
         </div>
@@ -443,7 +462,7 @@ export function WimHof() {
       const inhaling = pos < inMs
       const t = inhaling ? pos / inMs : (pos - inMs) / outMs
       const eased = easeInOut(t)
-      const scale = inhaling ? 0.55 + 0.55 * eased : 1.1 - 0.55 * eased
+      const scale = inhaling ? 0.72 + 0.4 * eased : 1.12 - 0.4 * eased
       orbRef.current.style.transform = `scale(${scale.toFixed(4)})`
     }
 

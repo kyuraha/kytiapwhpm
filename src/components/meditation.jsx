@@ -3,7 +3,7 @@ import { Check, Flower2, Minus, Pause, Play, Plus, RotateCcw } from 'lucide-reac
 
 import { Button } from '#components/ui/button'
 import { Card, CardContent } from '#components/ui/card'
-import { ProgressRing } from '#components/progress-ring'
+import { ProgressRing, RING_BOX } from '#components/progress-ring'
 import { cn } from '#lib/utils'
 import { initAudio, playRoundComplete } from '#lib/sounds'
 
@@ -19,14 +19,16 @@ function formatTime(totalSeconds) {
 
 function Stepper({ label, value, onInc, onDec, decDisabled = false, incDisabled = false }) {
   const btn =
-    'grid size-9 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-foreground transition-colors hover:bg-white/[0.08] disabled:pointer-events-none disabled:opacity-35'
+    'grid size-8 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-foreground transition-colors hover:bg-white/[0.08] disabled:pointer-events-none disabled:opacity-35 sm:size-9'
 
   return (
-    <div className="flex flex-col items-center gap-2.5 rounded-xl border border-white/[0.06] bg-white/[0.03] p-3.5">
+    <div className="flex min-w-0 flex-col items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.03] p-[clamp(0.625rem,1.8dvh,0.875rem)]">
       <span className="text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
         {label}
       </span>
-      <div className="font-mono text-3xl font-semibold tabular-nums text-foreground">{value}</div>
+      <div className="font-mono text-2xl font-semibold tabular-nums text-foreground sm:text-3xl">
+        {value}
+      </div>
       <div className="flex gap-1.5">
         <button type="button" aria-label={`kurangi ${label}`} onClick={onDec} disabled={decDisabled} className={btn}>
           <Minus className="size-4" />
@@ -42,13 +44,13 @@ function Stepper({ label, value, onInc, onDec, decDisabled = false, incDisabled 
 function ZenAmbience() {
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-      <div className="absolute size-72 rounded-full border border-jade-400/10 animate-breathe" />
+      <div className="absolute size-[min(18rem,44dvh)] rounded-full border border-jade-400/10 animate-breathe" />
       <div
-        className="absolute size-72 rounded-full border border-jade-400/[0.07] animate-breathe"
+        className="absolute size-[min(18rem,44dvh)] rounded-full border border-jade-400/[0.07] animate-breathe"
         style={{ animationDelay: '-3s' }}
       />
       <div
-        className="absolute size-72 rounded-full border border-gold-300/[0.06] animate-breathe"
+        className="absolute size-[min(18rem,44dvh)] rounded-full border border-gold-300/[0.06] animate-breathe"
         style={{ animationDelay: '-6s' }}
       />
     </div>
@@ -58,7 +60,7 @@ function ZenAmbience() {
 function BrushMark({ char }) {
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-      <span className="font-brush text-[160px] leading-none text-jade-300/[0.045] select-none sm:text-[190px]">
+      <span className="font-brush text-[clamp(5rem,26dvh,190px)] leading-none text-jade-300/[0.045] select-none">
         {char}
       </span>
     </div>
@@ -69,13 +71,13 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
   const presetActive = (m) => m === minutes && seconds === 0
 
   return (
-    <Card className="border-jade-400/15 bg-gradient-to-b from-jade-400/[0.07] to-transparent shadow-2xl shadow-black/40">
-      <CardContent className="flex flex-col gap-4 p-4 sm:gap-5 sm:p-5">
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-full border border-jade-300/30 bg-gradient-to-br from-jade-300 to-jade-500 shadow-lg shadow-jade-500/20">
+    <Card className="border-jade-400/15 bg-gradient-to-b from-jade-400/[0.07] to-transparent py-0 shadow-2xl shadow-black/40">
+      <CardContent className="flex flex-col gap-[clamp(0.5rem,2.1dvh,1.25rem)] p-[clamp(0.75rem,2dvh,1.25rem)] wide-short:grid wide-short:grid-cols-2">
+          <div className="flex min-w-0 items-center gap-3 wide-short:col-span-2">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-full border border-jade-300/30 bg-gradient-to-br from-jade-300 to-jade-500 shadow-lg shadow-jade-500/20">
               <Flower2 className="size-5 text-[#0f231a]" />
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="text-sm font-semibold tracking-tight text-foreground">Ruang Hening · 静坐</div>
               <div className="text-xs leading-snug text-muted-foreground">
                 Hadir sepenuhnya — beberapa menit cukup untuk menjernihkan pikiran.
@@ -103,9 +105,9 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
 
         <div>
           <div className="mb-2 text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
-            Pilihan cepat
+            Pilihan cepat · <span className="normal-case">menit</span>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-5 gap-1.5 sm:flex sm:flex-wrap sm:gap-2">
             {PRESETS.map((m) => (
               <button
                 key={m}
@@ -115,25 +117,26 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
                   adjustSecond(0, 0)
                 }}
                 className={cn(
-                  'h-9 rounded-lg px-3.5 text-sm font-medium transition-colors',
+                  'h-9 rounded-lg px-2 text-sm font-medium transition-colors sm:px-3.5',
                   presetActive(m)
                     ? 'bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-md shadow-jade-500/25'
                     : 'border border-white/10 bg-white/[0.03] text-muted-foreground hover:text-foreground',
                 )}
               >
-                {m} menit
+                {m}
+                <span className="hidden sm:inline"> menit</span>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl border border-jade-400/15 bg-ink-950/70 px-4 py-4 text-center">
+        <div className="relative overflow-hidden rounded-xl border border-jade-400/15 bg-ink-950/70 px-4 py-3 text-center sm:py-4">
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-jade-400/[0.06] to-transparent" />
-          <div className="relative font-mono text-4xl font-semibold tracking-tight tabular-nums text-jade-300">
+          <div className="relative font-mono text-3xl font-semibold tracking-tight tabular-nums text-jade-300 sm:text-4xl">
             {formatTime(totalSeconds)}
           </div>
           <div className="relative mt-1 text-xs tracking-wide text-muted-foreground">durasi sesi</div>
-          <p className="relative mx-auto mt-2 max-w-[28ch] text-[11px] leading-relaxed text-muted-foreground/70">
+          <p className="relative mx-auto mt-2 max-w-[28ch] text-[11px] leading-relaxed text-muted-foreground/70 tight:hidden">
             Tidak perlu lama untuk bermakna. Konsistensi lebih penting dari durasi.
           </p>
         </div>
@@ -153,7 +156,7 @@ function IdleView({ minutes, seconds, adjustMinute, adjustSecond, totalSeconds, 
 
 function RunningView({ status, remaining, progress, onPause, onResume, onStop }) {
   return (
-    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-jade-400/15 bg-gradient-to-b from-jade-400/[0.06] to-transparent px-4 py-6 sm:gap-8 sm:py-8">
+    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-jade-400/15 bg-gradient-to-b from-jade-400/[0.06] to-transparent px-4 py-[clamp(1rem,3.2dvh,2rem)] sm:px-6">
       <ZenAmbience />
       <BrushMark char="禅" />
 
@@ -162,26 +165,27 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
           id="med-ring"
           progress={progress}
           size={240}
+          box={RING_BOX}
           stroke={11}
           startColor="#a8dcc0"
           endColor="#478a68"
         >
           <div className="text-center">
-            <div className="font-mono text-4xl font-semibold tracking-tight tabular-nums text-foreground sm:text-5xl">
+            <div className="font-mono text-[19cqw] leading-none font-semibold tracking-tight tabular-nums text-foreground">
               {formatTime(remaining)}
             </div>
-            <div className="mt-1 text-[11px] font-medium tracking-widest text-jade-400/70 uppercase">
+            <div className="mt-1 text-[4.5cqw] font-medium tracking-widest text-jade-400/70 uppercase">
               {status === 'paused' ? 'dijeda' : 'meditasi'}
             </div>
           </div>
         </ProgressRing>
       </div>
 
-      <div className="relative flex items-center justify-center gap-3">
+      <div className="relative flex w-full max-w-xs items-center justify-center gap-2.5 sm:max-w-none sm:gap-3">
         {status === 'running' ? (
           <Button
             size="lg"
-            className="h-12 min-w-40 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400"
+            className="h-12 min-w-0 flex-1 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400 sm:min-w-40 sm:flex-none"
             onClick={onPause}
           >
             <Pause className="size-4" />
@@ -190,7 +194,7 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
         ) : (
           <Button
             size="lg"
-            className="h-12 min-w-40 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400"
+            className="h-12 min-w-0 flex-1 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400 sm:min-w-40 sm:flex-none"
             onClick={onResume}
           >
             <Play className="size-4" />
@@ -201,7 +205,7 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
           size="lg"
           variant="outline"
           onClick={onStop}
-          className="h-12 min-w-32 rounded-xl border-jade-300/15 bg-white/[0.03] text-muted-foreground hover:bg-jade-400/10 hover:text-jade-300"
+          className="h-12 min-w-0 flex-1 rounded-xl border-jade-300/15 bg-white/[0.03] text-muted-foreground hover:bg-jade-400/10 hover:text-jade-300 sm:min-w-32 sm:flex-none"
         >
           <RotateCcw className="size-4" />
           Selesai
@@ -213,7 +217,7 @@ function RunningView({ status, remaining, progress, onPause, onResume, onStop })
 
 function FinishedView({ minutes, onAgain }) {
   return (
-    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-jade-400/15 bg-gradient-to-b from-jade-400/[0.06] to-transparent px-4 py-6 text-center sm:gap-8 sm:py-8">
+    <div className="relative flex flex-col items-center justify-center gap-6 overflow-hidden rounded-2xl border border-jade-400/15 bg-gradient-to-b from-jade-400/[0.06] to-transparent px-4 py-[clamp(1rem,3.2dvh,2rem)] text-center sm:px-6">
       <ZenAmbience />
       <BrushMark char="悟" />
 
@@ -222,12 +226,13 @@ function FinishedView({ minutes, onAgain }) {
           id="med-done"
           progress={1}
           size={168}
+          box="min(168px, 22dvh)"
           stroke={10}
           startColor="#a8dcc0"
           endColor="#478a68"
         >
-          <div className="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-jade-300 to-jade-500 shadow-lg shadow-jade-500/30">
-            <Check className="size-6 text-[#0f231a]" />
+          <div className="flex size-[29%] items-center justify-center rounded-full bg-gradient-to-br from-jade-300 to-jade-500 shadow-lg shadow-jade-500/30">
+            <Check className="size-1/2 text-[#0f231a]" />
           </div>
         </ProgressRing>
       </div>
@@ -242,7 +247,7 @@ function FinishedView({ minutes, onAgain }) {
 
       <Button
         size="lg"
-        className="relative h-12 min-w-52 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400"
+        className="relative h-12 w-full max-w-52 rounded-xl bg-gradient-to-b from-jade-300 to-jade-500 text-[#0f231a] shadow-lg shadow-jade-500/25 hover:from-jade-300 hover:to-jade-400"
         onClick={onAgain}
       >
         <RotateCcw className="size-4" />
